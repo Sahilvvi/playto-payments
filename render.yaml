@@ -12,11 +12,6 @@ services:
         fromDatabase:
           name: playto-db
           property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: playto-redis
-          property: connectionString
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
@@ -24,40 +19,7 @@ services:
       - key: ALLOWED_HOSTS
         value: "*"
 
-  # Celery Worker
-  - type: worker
-    name: playto-worker
-    env: docker
-    dockerContext: backend
-    dockerfilePath: backend/Dockerfile
-    plan: free
-    region: singapore
-    # Overwrite the CMD to run celery
-    dockerCommand: "celery -A playto worker --loglevel=info"
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: playto-db
-          property: connectionString
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: playto-redis
-          property: connectionString
-      - key: SECRET_KEY
-        fromService:
-          type: web
-          name: playto-api
-          property: envVar:SECRET_KEY
-
 databases:
   - name: playto-db
-    plan: free
-    region: singapore
-
-# Render's managed Redis (Requires a paid plan, otherwise use Upstash)
-# For the "Free" tier on Render, we use a custom Redis service or external
-redis:
-  - name: playto-redis
     plan: free
     region: singapore

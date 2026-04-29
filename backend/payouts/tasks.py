@@ -157,7 +157,7 @@ def process_payout(payout_id: str) -> None:
     # --- SIMULATE BANK SETTLEMENT ---
     # This intentionally runs OUTSIDE the transaction so we don't hold the row
     # lock while waiting for a fake "network" call.
-    time.sleep(random.uniform(0.3, 1.5))
+    time.sleep(random.uniform(0.2, 0.8))
 
     roll = random.random()
     if roll < 0.70:
